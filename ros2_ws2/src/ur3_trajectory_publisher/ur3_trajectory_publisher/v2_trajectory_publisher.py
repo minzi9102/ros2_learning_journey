@@ -19,7 +19,7 @@ ros2 launch ur_bringup ur_control.launch.py ur_type:=ur3 robot_ip:=192.168.0.100
 cd ./ros2_ws2
 source /opt/ros/humble/setup.bash
 source install/setup.bash
-ros2 run ur3_trajectory_publisher v2_trajectory_publisher.py
+ros2 run ur3_trajectory_publisher v2_trajectory_publisher
 """
 
 # ---------- 导入 ROS 2 相关功能包 ----------
