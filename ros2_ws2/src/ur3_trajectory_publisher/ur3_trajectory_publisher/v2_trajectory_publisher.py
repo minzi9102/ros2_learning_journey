@@ -15,15 +15,11 @@ UR3 轨迹发布节点 (这是一个多行注释，通常用作模块的说明�
 运行方式：
 确保 ROS 2 环境已经正确设置，并且相关的控制器节点正在运行。
 ros2 launch ur_bringup ur_control.launch.py ur_type:=ur3 robot_ip:=192.168.0.100 use_fake_hardware:=true
-ros2 launch ur_moveit_config ur_moveit.launch.py \
-  ur_type:=ur3 \
-  use_fake_hardware:=true \
-  launch_rviz:=true
 然后在另一个终端运行这个脚本：
 cd ./ros2_ws2
 source /opt/ros/humble/setup.bash
 source install/setup.bash
-ros2 run ur3_trajectory_publisher trajectory_publisher.py
+ros2 run ur3_trajectory_publisher v2_trajectory_publisher.py
 """
 
 # ---------- 导入 ROS 2 相关功能包 ----------
