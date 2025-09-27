@@ -16,6 +16,12 @@
     
 3. **生成新的 SSH 密钥对**
     
+    一般只有在重建容器后才会打开这个文件，请看到这一行时记得设置新容器的git用户名称和邮箱
+    ```
+    git config --global user.email chenmj75@mail2.sysu.edu.cn
+    git config --global user.name minzi9102
+    ```
+    
     如果没有，或者你想创建一个新的，请运行以下命令。推荐使用 Ed25519 算法，它更安全也更高效。
     
     ```bash
