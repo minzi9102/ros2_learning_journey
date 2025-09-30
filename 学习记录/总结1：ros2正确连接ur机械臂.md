@@ -112,12 +112,11 @@
       reverse_ip:=192.168.56.1
   ```
 
-  |参数|说明|
-  |---|---|
-  |ur_type:=ur3|指定机械臂型号为 UR3。驱动会加载对应的 URDF、限制参数（速度、加速度等）和默认配置。|
-  |robot_ip:=192.168.56.101|UR 控制器的 IP 地址。ROS 2 主机将通过此地址与机械臂通信（需确保网络连通）。|
-  |kinematics_params_file:=...|指向一个 YAML 格式的 校准后 **DH 参数文件**。用于替代 UR 默认的运动学模型，提升精度（通常通过 UR 自动校准工具生成）。|
-  |reverse_ip:=192.168.56.1|**ROS 2 主机的 IP 地址**。UR 控制器会主动连接此 IP 的 50001/50002 端口（用于实时控制和状态反馈）。必须设置正确，否则连接会失败。|
+  - 参数说明
+  > `ur_type:=ur3` ：指定机械臂型号为 UR3。驱动会加载对应的 URDF、限制参数（速度、加速度等）和默认配置。
+  > `robot_ip:=192.168.56.101`：UR 控制器的 IP 地址。ROS 2 主机将通过此地址与机械臂通信（需确保网络连通）。
+  > `kinematics_params_file:=...`：指向一个 YAML 格式的 校准后 **DH 参数文件**。用于替代 UR 默认的运动学模型，提升精度（通常通过 UR 自动校准工具生成）。
+  > `reverse_ip:=192.168.56.1`：**ROS 2 主机的 IP 地址**。UR 控制器会主动连接此 IP 的 50001/50002 端口（用于实时控制和状态反馈）。必须设置正确，否则连接会失败。
 
   运行代码后会出现一个Rviz界面，里面会有与UR3实际状态一致的虚拟机械臂，会随着真实机械臂运动而改变
 
@@ -142,7 +141,8 @@
     ```bash
     source install/setup.bash
 
-    ros2 launch ur_moveit_config ur_moveit.launch.py ur_type:=ur3 robot_ip:=192.168.56.101 reverse_ip:=192.168.56.1 
+    ros2 launch ur_moveit_config ur_moveit.launch.py ur_type:=ur3 \
+    robot_ip:=192.168.56.101 reverse_ip:=192.168.56.1 
     ```
   此举会创建一个新的Rviz界面，并能看到Motion Planning页面
   可以尝试使用moveit的基本方法控制机械臂了！
