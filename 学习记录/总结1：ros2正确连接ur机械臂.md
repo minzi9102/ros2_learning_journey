@@ -119,7 +119,8 @@
       ur_type:=ur3 \
       robot_ip:=192.168.56.101 \
       kinematics_params_file:="/ros2_workspaces/workspaces3/ur3_calibration.yaml" \
-      reverse_ip:=192.168.56.1
+      reverse_ip:=192.168.56.1 \
+      launch_rviz:=false
   ```
 
   - 参数说明
@@ -165,3 +166,11 @@
   此举会创建一个新的Rviz界面，并能看到Motion Planning页面
   可以尝试使用moveit的基本方法控制机械臂了！
   ![2025-10-1-155316.png](assets/总结1：ros2正确连接ur机械臂/2025-10-1-155316.png)
+
+## 注：务必按照以下顺序启动程序
+
+`ur_robot_driver` -> `External Control` -> `ur_moveit_config`
+
+否则会出现不能运动的错误
+
+若示教器中External Control已经运行，需要将其退出后重新按照以上顺序启动程序
