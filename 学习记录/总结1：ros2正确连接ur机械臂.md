@@ -23,7 +23,7 @@
 2. 配置容器启动参数和网络
     - 连接机械臂的网线，设置IPv4地址与机械臂在同一网段
 
-      > IPV4: 192.168.56.1(机械臂ip：192.168.56.101)
+      > IPV4: 192.168.57.1(机械臂ip：192.168.57.101)
       > 子网掩码：255.255.255.0
     ![2025-10-1-154502.png](assets/总结1：ros2正确连接ur机械臂/2025-10-1-154502.png)
     ![2025-10-1-154515.png](assets/总结1：ros2正确连接ur机械臂/2025-10-1-154515.png)
@@ -54,30 +54,17 @@
   - 安装UR机械臂相关驱动
   ```bash
   sudo apt update
-  sudo apt install  ros-humble-ur\
+  sudo apt install -y ros-humble-ur\
                     ros-humble-ur-robot-driver\
                     ros-humble-moveit\
-                    ros-humble-ur-moveit-config
-                    ros-humble-ros2-control \ 
+                    ros-humble-ur-moveit-config \
+                    ros-humble-ros2-control \
                     ros-humble-ros2-controllers \
                     ros-humble-joint-trajectory-controller \
-                    ros-humble-velocity-controllers \
+                    ros-humble-velocity-controllers 
+  注 \ 后不能有空格
   ```
-  - 克隆UR机械臂驱动源代码仓库
 
-  ```
-  cd {workspace}/src 
-  git clone -b humble https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver.git
-  git clone -b humble https://github.com/UniversalRobots/Universal_Robots_ROS2_Description.git
-  ```
-  - 使用rosdep自动安装所有包所声明的系统依赖
-  ```
-  rosdep init(一般会由系统自动执行，手动执行会报错，可以忽略)
-  rosdep update
-  rosdep install --from-paths src --ignore-src -r -y
-  ```
-  - 编译程序包
-  `colcon build --symlink-install`
 
 4. 连接UR3机械臂实机
 
@@ -119,6 +106,8 @@
       ur_type:=ur3 \
       robot_ip:=192.168.56.101 \
       kinematics_params_file:="/ros2_workspaces/workspaces3/ur3_calibration.yaml" \
+      reverse_ip:=192.168.56.1 \
+      launch_rviz:=false
       reverse_ip:=192.168.56.1 \
       launch_rviz:=false
   ```
@@ -174,3 +163,33 @@
 否则会出现不能运动的错误
 
 若示教器中External Control已经运行，需要将其退出后重新按照以上顺序启动程序
+
+
+## 尝试在远程模式启动机械臂ros控制
+
+步骤：
+```
+  source /opt/ros/humble/setup.bash
+
+  ros2 launch ur_robot_driver ur_control.launch.py \
+      ur_type:=ur3 \
+      robot_ip:=192.168.56.101 \
+      kinematics_params_file:="/ros2_workspaces/workspaces3/ur3_calibration.yaml" \
+      reverse_ip:=192.168.56.1 \
+      launch_rviz:=false
+
+  **启动external control urcaps：**
+  
+  开启新的终端
+  source /opt/ros/humble/setup.bash
+
+  ros2 service call /dashboard_client/connect std_srvs/srv/Trigger {}
+  ros2 service call /dashboard_client/load_program ur_dashboard_msgs/srv/Load "filename: external_control.urp"
+  ros2 service call /dashboard_client/play std_srvs/srv/Trigger {}
+  ros2 service call /dashboard_client/stop std_srvs/srv/Trigger {}
+
+  ros2 service call /dashboard_client/program_running ur_dashboard_msgs/IsProgramRunning {}
+
+  ros2 launch ur_moveit_config ur_moveit.launch.py ur_type:=ur3 \
+    robot_ip:=192.168.56.101 reverse_ip:=192.168.56.1
+```
