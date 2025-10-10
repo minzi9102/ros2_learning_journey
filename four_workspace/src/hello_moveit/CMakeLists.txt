@@ -12,14 +12,20 @@ find_package(rclcpp REQUIRED)
 
 add_executable(nihao_moveit src/nihao_moveit.cpp)
 add_executable(cartesian_moveit src/cartesian_moveit.cpp)
+add_executable(ur_robot_model_and_state src/ur_robot_model_and_state.cpp)
 target_include_directories(nihao_moveit PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 target_include_directories(cartesian_moveit PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
+target_include_directories(ur_robot_model_and_state PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
 target_compile_features(nihao_moveit PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
 target_compile_features(cartesian_moveit PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+target_compile_features(ur_robot_model_and_state PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+
 ament_target_dependencies(
   nihao_moveit
   "moveit_ros_planning_interface"
@@ -31,11 +37,25 @@ ament_target_dependencies(
   "moveit_ros_planning_interface"
   "rclcpp"
 )
+ament_target_dependencies(
+  ur_robot_model_and_state
+  "moveit_core"
+  "moveit_ros_planning"
+  "moveit_ros_planning_interface"
+  "rclcpp"
+  
+)
 
 install(TARGETS 
   nihao_moveit 
   cartesian_moveit
+  ur_robot_model_and_state
   DESTINATION lib/${PROJECT_NAME})
+
+install(DIRECTORY
+  launch
+  DESTINATION share/${PROJECT_NAME}
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
